@@ -64,7 +64,7 @@ export class MoveSystem implements ISystem {
                     }
                   }
             
-                  if(direction == "down"){6
+                  if(direction == "down"){
                     if(position.y > .2){
                       position.y -= .1
                       this.axis.getComponent(Transform).position.y -= .1
@@ -152,7 +152,7 @@ class BuilderHUD {
     dButton:UIImage
 
     modeButton:UIImage
-    modeLabel:UIText6
+    modeLabel:UIText
     snapButton:UIImage
     snapLabel:UIText
 
@@ -193,7 +193,30 @@ class BuilderHUD {
 
     movingSystem:MoveSystem
 
+    unsavedContainer: UIContainerRect
+
     constructor () {
+
+        this.unsavedContainer = new UIContainerRect(this.canvas)
+        this.unsavedContainer.hAlign = 'right'
+        this.unsavedContainer.vAlign = 'bottom'
+        this.unsavedContainer.width = 160
+        this.unsavedContainer.height = 20
+        this.unsavedContainer.positionY = 530
+
+        this.unsavedContainer.positionX = 0
+        this.unsavedContainer.color = Color4.Red()
+        this.unsavedContainer.visible = false
+
+        var changes = new UIText(this.unsavedContainer)
+        changes.hAlign = 'center'
+        changes.vAlign = 'center'
+        changes.positionY = 0
+        changes.positionX = 0
+        changes.height = 10
+        changes.fontSize = 12
+        changes.hTextAlign = "center"
+        changes.value = "** Unsaved Changes **"
 
         this.axis = new Entity()
         this.axis.addComponent(new Transform({
@@ -201,7 +224,6 @@ class BuilderHUD {
             scale: Vector3.Zero()
         }))
         engine.addEntity(this.axis)
-
 
         var xaxis = new Entity()
         xaxis.addComponent(new BoxShape())
@@ -217,7 +239,7 @@ class BuilderHUD {
         var xaxisText = new Entity()
         xaxisText.addComponent(new TextShape("X"))
         xaxisText.addComponent(new Transform({
-            position: new Vector3(3,.5,.4)
+            position: new Vector3(3,.5,.2)
         }))
         xaxisText.addComponent(new Billboard(false,true,false))
         xaxisText.setParent(this.axis)
@@ -448,8 +470,11 @@ class BuilderHUD {
         
         returnHome.onClick = new OnClick(() => {
             this.toggleLift.sourceLeft = 503
+            this.axis.getComponent(Transform).position.y = 1
             this.toggleColliders(true)
+            engine.addSystem(new ClickAnimationSystem(returnHome))
         })
+        
 
         this.toggleLift = new UIImage(this.uiMaximizedContainer, imageTexture)
         this.toggleLift.sourceLeft = 584
@@ -465,6 +490,7 @@ class BuilderHUD {
         this.toggleLift.isPointerBlocker = true
         this.toggleLift.onClick = new OnClick(() => {
             this.toggleColliders(false)
+            engine.addSystem(new ClickAnimationSystem(this.toggleLift))
         })
 
         this.toggleCamera = new UIImage(this.uiMaximizedContainer, imageTexture)
@@ -481,6 +507,7 @@ class BuilderHUD {
         this.toggleCamera.isPointerBlocker = true
         this.toggleCamera.onClick = new OnClick(() => {
             this.toggleCameraOptions()
+            engine.addSystem(new ClickAnimationSystem(this.toggleCamera))
         })
         this.toggleCamera.visible = false
 
@@ -500,6 +527,7 @@ class BuilderHUD {
         this.scaffoldB.isPointerBlocker = true
         this.scaffoldB.onClick = new OnClick(() => {
             this.moveScaffold("q")
+            engine.addSystem(new ClickAnimationSystem(this.scaffoldB))
         })
 
         // w button  +y pos,scale; -x rot
@@ -517,6 +545,7 @@ class BuilderHUD {
         this.scaffoldU.isPointerBlocker = true
         this.scaffoldU.onClick = new OnClick(() => {
             this.moveScaffold("w")
+            engine.addSystem(new ClickAnimationSystem(this.scaffoldU))
         })
 
         // e button  +z pos,scale; +y rot
@@ -534,6 +563,7 @@ class BuilderHUD {
         this.scaffoldF.isPointerBlocker = true
         this.scaffoldF.onClick = new OnClick(() => {
             this.moveScaffold("e")
+            engine.addSystem(new ClickAnimationSystem(this.scaffoldF))
         })
 
                 // ROW 2
@@ -552,6 +582,7 @@ class BuilderHUD {
         this.scaffoldL.isPointerBlocker = true
         this.scaffoldL.onClick = new OnClick(() => {
             this.moveScaffold("a")
+            engine.addSystem(new ClickAnimationSystem(this.scaffoldL))
         })
 
         // S button  -y pos,scale; +x rot
@@ -569,6 +600,7 @@ class BuilderHUD {
         this.scaffoldD.isPointerBlocker = true
         this.scaffoldD.onClick = new OnClick(() => {
             this.moveScaffold("s")
+            engine.addSystem(new ClickAnimationSystem(this.scaffoldD))
         })
 
         // d button  +x pos,scale; -y rot
@@ -586,6 +618,7 @@ class BuilderHUD {
         this.scaffoldR.isPointerBlocker = true
         this.scaffoldR.onClick = new OnClick(() => {
             this.moveScaffold("d")
+            engine.addSystem(new ClickAnimationSystem(this.scaffoldR))
         })
 
 
@@ -615,6 +648,7 @@ class BuilderHUD {
         this.selectPreviousButton.isPointerBlocker = true
         this.selectPreviousButton.onClick = new OnClick(() => {
             this.selectPrevious()
+            engine.addSystem(new ClickAnimationSystem(this.selectPreviousButton))
         })
 
         // Select Next button
@@ -632,6 +666,7 @@ class BuilderHUD {
         this.selectNextButton.isPointerBlocker = true
         this.selectNextButton.onClick = new OnClick(() => {
             this.selectNext()
+            engine.addSystem(new ClickAnimationSystem(this.selectNextButton))
         })
 
         // Save button
@@ -649,6 +684,7 @@ class BuilderHUD {
         this.saveButton.isPointerBlocker = true
         this.saveButton.onClick = new OnClick(() => {
             this.dump()
+            engine.addSystem(new ClickAnimationSystem(this.saveButton))
         })
 
 
@@ -666,8 +702,9 @@ class BuilderHUD {
         this.qButton.width=40
         this.qButton.height=40
         this.qButton.isPointerBlocker = true
-        this.qButton.onClick = new OnClick(() => {
+        this.qButton.onClick = new OnClick((e) => {
             this.adjustTransform("q")
+            engine.addSystem(new ClickAnimationSystem(this.qButton))
         })
 
         // w button  +y pos,scale; -x rot
@@ -685,6 +722,7 @@ class BuilderHUD {
         this.wButton.isPointerBlocker = true
         this.wButton.onClick = new OnClick(() => {
             this.adjustTransform("w")
+            engine.addSystem(new ClickAnimationSystem(this.wButton))
         })
 
         // e button  +z pos,scale; +y rot
@@ -702,6 +740,7 @@ class BuilderHUD {
         this.eButton.isPointerBlocker = true
         this.eButton.onClick = new OnClick(() => {
             this.adjustTransform("e")
+            engine.addSystem(new ClickAnimationSystem(this.eButton))
         })
 
         // ROW 2
@@ -720,6 +759,7 @@ class BuilderHUD {
         this.aButton.isPointerBlocker = true
         this.aButton.onClick = new OnClick(() => {
             this.adjustTransform("a")
+            engine.addSystem(new ClickAnimationSystem(this.aButton))
         })
 
         // S button  -y pos,scale; +x rot
@@ -737,6 +777,7 @@ class BuilderHUD {
         this.sButton.isPointerBlocker = true
         this.sButton.onClick = new OnClick(() => {
             this.adjustTransform("s")
+            engine.addSystem(new ClickAnimationSystem(this.sButton))
         })
 
         // d button  +x pos,scale; -y rot
@@ -754,6 +795,7 @@ class BuilderHUD {
         this.dButton.isPointerBlocker = true
         this.dButton.onClick = new OnClick(() => {
             this.adjustTransform("d")
+            engine.addSystem(new ClickAnimationSystem(this.dButton))
         })
 
 
@@ -778,6 +820,7 @@ class BuilderHUD {
             this.snap = 0
             this.setSnaps()
             this.applyModeAndSnapLabels()
+            engine.addSystem(new ClickAnimationSystem(this.modeButton))
         })
 
         this.modeLabel = new UIText(this.modeButton)
@@ -812,6 +855,7 @@ class BuilderHUD {
                 this.snap = 0
             this.setSnaps()
             this.applyModeAndSnapLabels()
+            engine.addSystem(new ClickAnimationSystem(this.snapButton))
         })
 
         this.snapLabel = new UIText(this.snapButton)
@@ -847,6 +891,7 @@ class BuilderHUD {
         this.minimizeButton.isPointerBlocker = true
         this.minimizeButton.onClick = new OnClick(() => {
              this.minimizeUI()
+             engine.addSystem(new ClickAnimationSystem(this.minimizeButton))
         })
 
         // ROW 5
@@ -943,6 +988,7 @@ class BuilderHUD {
     }
 
     maximizeUI(){
+        this.unsavedContainer.visible = true
         this.uiMinimizedContainer.visible = false
         this.uiMaximizedContainer.visible = true
         this.uiMaximized = true
@@ -956,6 +1002,7 @@ class BuilderHUD {
         this.axis.getComponent(Transform).scale = Vector3.One()
     }
     minimizeUI(){
+        this.unsavedContainer.visible = false
         this.uiMaximizedContainer.visible = false
         this.uiMinimizedContainer.visible = true
         this.uiMaximized = false
@@ -1093,6 +1140,7 @@ class BuilderHUD {
     }
 
     adjustTransform(key:string){
+        this.unsavedContainer.visible = true
         let transform = this.entities[this.selectedEntityIndex].entity.getComponent(Transform)
         switch (this.mode){
             case this.modePOSITION:
@@ -1177,7 +1225,6 @@ class BuilderHUD {
     }
 
     async attachToEntity(entity:Entity, preexisting:boolean = true){
-        log('attache')
         if (entity == null){
             log("BuilderHUD attachToEntity called with a null entity")
         }
@@ -1285,6 +1332,7 @@ class BuilderHUD {
         return Math.floor((n+0.00049)*1000)/1000
     }
     dump(){
+        this.unsavedContainer.visible = false
         // Write the pseudo spawnEntity code for all the entities to the console
         log("--------------- BuilderHUD entities -------------")
         for (let i in this.entities){
@@ -1376,4 +1424,24 @@ export var hud = new BuilderHUD()
 log("after hud")
 hud.pendingEntityAdd = new hudDelay(hud)
 engine.addSystem(hud.pendingEntityAdd)
+
+export class ClickAnimationSystem {
+
+    uiIMage:UIImage
+    timer = .1
+
+    constructor(image:UIImage){
+        this.uiIMage = image
+    }
+  update(dt: number) {
+    if (this.timer > 0) {
+        this.uiIMage.opacity -= .3
+        this.timer -= dt
+    } else {
+        this.timer = .1
+        this.uiIMage.opacity = 1
+        engine.removeSystem(this)
+    }
+  }
+}
 
