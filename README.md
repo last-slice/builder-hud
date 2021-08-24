@@ -7,6 +7,7 @@ Positioning entities in the sdk can be very difficult - always guessing the x,y,
 
 ### Setup
 - Download this repo / zip file to your computer
+- Navigate to the src folder
 - copy / paste the ENTIRE builderHUD folder into your Scene folder -> src folder
 
 
