@@ -58,7 +58,7 @@ export class MoveSystem implements ISystem {
 
             case "free":
                 if(direction == "up"){
-                    if(position.y < 35){
+                    if(position.y < 100){
                       position.y += .1
                       this.axis.getComponent(Transform).position.y += .1
                     }
@@ -111,18 +111,18 @@ export class MoveSystem implements ISystem {
 
 class BuilderHUD {
     isSetup: boolean = false
-    defaultParent:Entity
+    defaultParent:any
     entities:{entity: Entity, transform:Transform, preexisting:boolean}[] = []
     numEntities:number = 0
     selectedEntityIndex:number = -1 // index into this.entities of selected entity.  -1 means none yet selected.
-    rotator: EntityRotator = null
+    rotator:any
 
-    selectionPointer: Entity = null
+    selectionPointer:any
     selectionPointerShape: Shape
     selectionPointerScale:number=0.3
     selectionPointerElevation:number = .5 // how much the selection pointer is raised relative to the root of the selected object.
                                          // TODO provide a means to adjust its elevation, or to determine top of object and put it above that.
-    newEntityShape:Shape = null
+    newEntityShape:any
     newEntityScale:number = 0.1
 
     modePOSITION:number=0
@@ -134,50 +134,50 @@ class BuilderHUD {
     snapPosScale:number = 1
     snapRot:number = 90
 
-    canvas:UICanvas = null
-    uiMinimizedContainer: UIContainerRect
-    uiMaximizedContainer: UIContainerRect
+    canvas:any
+    uiMinimizedContainer: any
+    uiMaximizedContainer: any
     uiMaximized:boolean = false
 
-    maximizeButton:UIImage
+    maximizeButton:any
 
-    displayName:UIText
+    displayName:any
 
-    qButton:UIImage
-    wButton:UIImage
-    eButton:UIImage
+    qButton:any
+    wButton:any
+    eButton:any
 
-    aButton:UIImage
-    sButton:UIImage
-    dButton:UIImage
+    aButton:any
+    sButton:any
+    dButton:any
 
-    modeButton:UIImage
-    modeLabel:UIText
-    snapButton:UIImage
-    snapLabel:UIText
+    modeButton:any
+    modeLabel:any
+    snapButton:any
+    snapLabel:any
 
-    selectPreviousButton:UIImage
-    selectNextButton:UIImage
-    discardItemButton:UIImage
+    selectPreviousButton:any
+    selectNextButton:any
+    discardItemButton:any
 
-    newEntitytButtonButton:UIImage
-    saveButton:UIImage
-    minimizeButton:UIImage
+    newEntitytButtonButton:any
+    saveButton:any
+    minimizeButton:any
 
     engineEntities:Entity[] = []
 
-    pendingEntityAdd:hudDelay
+    pendingEntityAdd:any
 
     scaffolding:Entity
 
-    scaffoldU:UIImage
-    scaffoldD:UIImage
-    scaffoldL:UIImage
-    scaffoldR:UIImage
-    scaffoldF:UIImage
-    scaffoldB:UIImage
-    toggleLift:UIImage
-    toggleCamera:UIImage
+    scaffoldU:any
+    scaffoldD:any
+    scaffoldL:any
+    scaffoldR:any
+    scaffoldF:any
+    scaffoldB:any
+    toggleLift:any
+    toggleCamera:any
 
     scaffloor:Entity
     showingColliders: boolean = false
@@ -988,7 +988,6 @@ class BuilderHUD {
     }
 
     maximizeUI(){
-        this.unsavedContainer.visible = true
         this.uiMinimizedContainer.visible = false
         this.uiMaximizedContainer.visible = true
         this.uiMaximized = true
@@ -1002,7 +1001,6 @@ class BuilderHUD {
         this.axis.getComponent(Transform).scale = Vector3.One()
     }
     minimizeUI(){
-        this.unsavedContainer.visible = false
         this.uiMaximizedContainer.visible = false
         this.uiMinimizedContainer.visible = true
         this.uiMaximized = false
@@ -1318,7 +1316,7 @@ class BuilderHUD {
                 this.newEntityShape = new BoxShape()
                 let mtl = new Material()
                 mtl.albedoColor = Color3.Green()
-                e.addComponent(mtl)
+                //e.addComponent(mtl)
             }
         }
         e.addComponent(this.newEntityShape)
@@ -1353,7 +1351,7 @@ class BuilderHUD {
             if (!this.entities[i].preexisting){
                 this.entities[i].entity.setParent(null)
                 engine.removeEntity(this.entities[i].entity)
-                this.entities[i].entity=null // should probaby be last reference to it, freeing its memory
+                //this.entities[i].entity=null // should probaby be last reference to it, freeing its memory
             }
         }
         this.entities = [] 
@@ -1366,9 +1364,9 @@ class BuilderHUD {
 }
 
 class EntityRotator implements ISystem {
-    rotatingEntity: Entity
-    rotatingEntityParent: Entity
-    speed: number
+    rotatingEntity: any
+    rotatingEntityParent: any
+    speed: any
     firstUpdate:boolean = true
 
     constructor (){
